@@ -73,16 +73,7 @@
 
    ค่าตั้งต้นนี้ใช้กับ XAMPP ที่ตั้ง MySQL `root` โดยไม่มีรหัสผ่าน หากกำหนดรหัสผ่านไว้ ให้ใส่ใน `DB_PASSWORD`
 
-7. สร้าง application key และรัน migration
-
-   ```bash
-   php artisan key:generate
-   php artisan migrate
-   ```
-
-   เมื่อ import ไฟล์สำรองแล้ว คำสั่ง migration จะเพิ่มเฉพาะ migration ที่ยังไม่มีในฐานข้อมูล
-
-8. เริ่มเซิร์ฟเวอร์สำหรับพัฒนา
+7. เริ่มเซิร์ฟเวอร์สำหรับพัฒนา
 
    ```bash
    php artisan serve
