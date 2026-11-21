@@ -1,6 +1,6 @@
 # POS Mini Project
 
-เว็บแอปพลิเคชันระบบขายหน้าร้าน (Point of Sale) พัฒนาด้วย Laravel สำหรับจัดการสินค้า การขาย ลูกค้า และรายงานสรุปการขาย
+เว็บแอปพลิเคชันระบบขายหน้าร้าน (Point of Sale) พัฒนาด้วย Laravel สำหรับจัดการสินค้า การขาย ลูกค้า และรายงานสรุปการขาย ใช้ MySQL/MariaDB จาก XAMPP เป็นฐานข้อมูล
 
 ## ความสามารถหลัก
 
@@ -14,32 +14,32 @@
 
 - PHP 8.2 ขึ้นไป
 - Laravel 11
-- SQLite (ค่าตั้งต้น)
+- MySQL/MariaDB ผ่าน XAMPP
 - Blade, JavaScript และ CSS
+
+## สิ่งที่ต้องเตรียม
+
+- XAMPP ที่มี Apache และ MySQL (MariaDB)
+- PHP 8.2 ขึ้นไป และ Composer
 
 ## การติดตั้ง
 
-### สิ่งที่ต้องเตรียม
+1. เปิด XAMPP Control Panel แล้ว Start **Apache** และ **MySQL**
 
-- PHP 8.2 ขึ้นไป พร้อมส่วนขยายที่ Laravel ต้องใช้
-- Composer
-
-### ขั้นตอน
-
-1. โคลนโปรเจกต์และเข้าไปยังโฟลเดอร์
+2. โคลนโปรเจกต์และเข้าไปยังโฟลเดอร์
 
    ```bash
    git clone https://github.com/Kachen09/mini-pos-laravel.git
    cd mini-pos-laravel
    ```
 
-2. ติดตั้ง PHP dependencies
+3. ติดตั้ง PHP dependencies
 
    ```bash
    composer install
    ```
 
-3. สร้างไฟล์ตั้งค่า `.env` จากตัวอย่าง
+4. สร้างไฟล์ตั้งค่า `.env` จากตัวอย่าง
 
    **Windows PowerShell**
 
@@ -53,43 +53,46 @@
    cp .env.example .env
    ```
 
-4. สร้างไฟล์ฐานข้อมูล SQLite และสร้าง application key
+5. สร้างฐานข้อมูล `pos_db2` ใน phpMyAdmin ที่ <http://localhost/phpmyadmin>
 
-   **Windows PowerShell**
+   ตั้งค่า collation เป็น `utf8mb4_unicode_ci` แล้วเลือกวิธีใดวิธีหนึ่ง:
 
-   ```powershell
-   New-Item -ItemType File -Path database/database.sqlite -Force
-   php artisan key:generate
+   - **ใช้ข้อมูลจากไฟล์สำรอง:** เปิดฐานข้อมูล `pos_db2` ไปที่แท็บ **Import** แล้วเลือกไฟล์ `pos_db2.sql` ซึ่งได้รับแยกจาก repository
+   - **เริ่มฐานข้อมูลว่าง:** ยังไม่ต้อง import ไฟล์สำรอง ระบบจะสร้างตารางให้ในขั้นตอน migration
+
+6. ตรวจสอบค่าฐานข้อมูลใน `.env` ให้ตรงกับ XAMPP ของเครื่อง
+
+   ```dotenv
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=pos_db2
+   DB_USERNAME=root
+   DB_PASSWORD=
    ```
 
-   **macOS / Linux**
+   ค่าตั้งต้นนี้ใช้กับ XAMPP ที่ตั้ง MySQL `root` โดยไม่มีรหัสผ่าน หากกำหนดรหัสผ่านไว้ ให้ใส่ใน `DB_PASSWORD`
+
+7. สร้าง application key และรัน migration
 
    ```bash
-   touch database/database.sqlite
    php artisan key:generate
-   ```
-
-5. สร้างตารางในฐานข้อมูล
-
-   ```bash
    php artisan migrate
    ```
 
-6. เริ่มเซิร์ฟเวอร์สำหรับพัฒนา
+   เมื่อ import ไฟล์สำรองแล้ว คำสั่ง migration จะเพิ่มเฉพาะ migration ที่ยังไม่มีในฐานข้อมูล
+
+8. เริ่มเซิร์ฟเวอร์สำหรับพัฒนา
 
    ```bash
    php artisan serve
    ```
 
-เปิดเว็บไซต์ที่ <http://127.0.0.1:8000> แล้วสมัครสมาชิกจากหน้า **สมัครสมาชิก** เพื่อเริ่มใช้งาน
-
-## การตั้งค่าฐานข้อมูล
-
-โปรเจกต์ตั้งค่าให้ใช้ SQLite โดยค่าเริ่มต้นใน `.env.example` หากต้องการใช้ฐานข้อมูลชนิดอื่น ให้แก้ค่าการเชื่อมต่อ `DB_*` ใน `.env` แล้วรัน migration อีกครั้ง
+เปิดเว็บไซต์ที่ <http://127.0.0.1:8000> หากนำเข้าฐานข้อมูลที่มีบัญชีผู้ใช้แล้ว ให้เข้าสู่ระบบด้วยบัญชีเดิม หากเริ่มจากฐานข้อมูลว่าง ให้สมัครสมาชิกจากหน้า **สมัครสมาชิก**
 
 ## หมายเหตุ
 
-- ไฟล์ `.env`, ฐานข้อมูลในเครื่อง, `vendor` และ `node_modules` ไม่ได้เก็บไว้ใน Git คำสั่งติดตั้งด้านบนจะสร้างไฟล์ที่จำเป็นในเครื่อง
+- ฐานข้อมูล `pos_db2` และไฟล์สำรอง `pos_db2.sql` ไม่ได้เก็บไว้ใน repository
 - อย่านำข้อมูลลูกค้าจริง รหัสผ่าน หรือกุญแจสำหรับใช้งานจริงไปใส่ใน repository สาธารณะ
 
 ## ผู้พัฒนา
