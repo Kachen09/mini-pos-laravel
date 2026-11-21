@@ -14,12 +14,12 @@
 
 - PHP 8.2 ขึ้นไป
 - Laravel 11
-- MySQL/MariaDB ผ่าน XAMPP
+- MySQL ผ่าน XAMPP
 - Blade, JavaScript และ CSS
 
 ## สิ่งที่ต้องเตรียม
 
-- XAMPP ที่มี Apache และ MySQL (MariaDB)
+- XAMPP ที่มี Apache และ MySQL
 - PHP 8.2 ขึ้นไป และ Composer
 
 ## การติดตั้ง
